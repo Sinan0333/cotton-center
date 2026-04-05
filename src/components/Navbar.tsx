@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Search, User, Home, Shirt, Sparkles, Baby } from "lucide-react";
+import { ShoppingBag, Search, User, Home, Shirt, Sparkles, Baby, Share2 } from "lucide-react";
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { InstallButton } from "./InstallButton";
@@ -11,6 +11,28 @@ export function Navbar({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const category = searchParams.get("category");
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    const url = window.location.origin + pathname;
+    const title = "Cotton Centre - Premium Fashion Essentials";
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+      } catch (err) {
+        console.log("Error sharing", err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.log("Failed to copy", err);
+      }
+    }
+  };
 
   const navLinks = [
     { label: "Shop All", href: "/shop", isShopAll: true },
@@ -55,6 +77,18 @@ export function Navbar({ isAdmin = false }: { isAdmin?: boolean }) {
           {/* Right Actions */}
           <div className="flex items-center gap-2">
             <InstallButton />
+            <button 
+              onClick={handleShare}
+              className={`p-2 rounded-full transition-all relative ${copied ? 'bg-black text-white' : 'text-gray-600 hover:bg-gray-100 hover:text-black'}`}
+              title="Share Website"
+            >
+              <Share2 className="h-5 w-5" />
+              {copied && (
+                <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] py-1 px-2 rounded-md shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-top-2">
+                  Link copied!
+                </span>
+              )}
+            </button>
             <Link href="/shop" className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors hover:text-black hidden md:block">
               <Search className="h-5 w-5" />
               <span className="sr-only">Search</span>
