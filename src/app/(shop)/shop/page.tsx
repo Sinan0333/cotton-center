@@ -61,7 +61,7 @@ async function ShopContent({ searchParams }: { searchParams: { [key: string]: st
             {categoryLabel ? `${categoryLabel} Collection` : "All Products"}
           </h1>
           <p className="text-lg text-gray-500 font-light">
-            {q ? `Search results for "${q}"` : "Discover our complete range of premium clothing designed and crafted for your everyday style."}
+            {q ? `Search results for "${q}"` : "Discover our complete range of budget-friendly readymade clothing. From daily wear to premium styles, we have something for everyone."}
           </p>
           <div className="mt-4 inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600">
             {products.length} {products.length === 1 ? 'Product' : 'Products'} available
